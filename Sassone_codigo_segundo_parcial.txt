@@ -1,0 +1,166 @@
+/*
+Segundo Parcial Práctico Domiciliario
+
+Tomás Santiago Sassone
+1°D
+DNI: 44937597 - Legajo: 114563
+
+El objetivo de este proyecto es diseñar un sistema de incendio
+utilizando Arduino que pueda detectar cambios de temperatura y
+activar un servo motor en caso de detectar un incendio.
+Además, se mostrará la temperatura actual y la estación
+del año en un display LCD.
+*/
+
+
+// Librerias
+#include <IRremote.h>
+#include <LiquidCrystal.h>
+#include <Servo.h>
+
+#define BOTON_APAGADO 0xFF00BF00
+#define LEDV 6
+#define LEDR 7
+#define IR 11
+#define SENSOR A0
+#define SERVO 9
+Servo myServo;
+
+int seconds = 0;
+boolean estadoCircuito = false;
+
+LiquidCrystal lcd_1(12, 10, 5, 4, 3, 2);
+
+
+// Setup
+void setup()
+{
+  pinMode(SENSOR, INPUT);
+  pinMode(LEDV, OUTPUT);
+  pinMode(LEDR, OUTPUT);
+  pinMode(2, OUTPUT);
+  Serial.begin(9600);
+  IrReceiver.begin(IR, DISABLE_LED_FEEDBACK);
+  lcd_1.begin(16, 2);
+  //servo
+  myServo.attach(9, 500, 2500);
+}
+
+
+// Loop principal
+void loop()
+{
+  encenderSistemaTemperatura();
+}
+
+
+//////////////////// FUNCIONES /////////////////////////
+
+void encenderSistemaTemperatura()
+{
+  /*
+  Sistema principal que controla todo el circuito. Recibe la
+  señal del control y, en caso de presionar el boton de
+  encendido, inicia el circuito. Se puede apagar con el
+  mismo boton.
+  */
+  if (IrReceiver.decode())
+  {
+    Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);
+
+    if (IrReceiver.decodedIRData.decodedRawData == BOTON_APAGADO)
+    {
+      cambiarEstadoCircuito();
+    }
+    else
+    {
+      lcd_1.begin(16, 2);
+    }
+    IrReceiver.resume();
+  }
+
+  if (estadoCircuito)
+  {
+    leerTemperatura();
+  }
+
+  delay(100);
+}
+
+////////////////////////////////////////////////////////
+
+void encenderRociador()
+{
+  myServo.write(180);
+  delay(1000);
+  myServo.write(0);
+  delay(1000);
+}
+
+////////////////////////////////////////////////////////
+
+void leerTemperatura()
+{
+  /* Lee la temperatura ambiente con el sensor de temp,
+  la imprime en celsius en el display LCD, y dependiendo
+  de la misma, imprime en que estación se encuentra el lugar.
+  Si la temperatura supera los 60°C, se reconoce como un
+  incendio y el display muestra un mensaje de alerta. Se
+  encenderá el rociador (servo) para apagar el fuego.
+  El LED verde estará encendido si la temperatura registrada
+  es segura. En caso de incendio, este se apagará y se
+  encenderá el LED rojo.
+  */
+  int lectura;
+  lectura = analogRead(SENSOR);
+  int grados = map(lectura, 20, 358, -41, 125);
+  digitalWrite(LEDR, LOW);
+  digitalWrite(LEDV, LOW);
+  lcd_1.clear();
+  lcd_1.print("Temperatura: ");
+  lcd_1.print(grados); //muestro la temp en el display
+  lcd_1.print("C");
+  
+  // Segunda linea display
+  lcd_1.setCursor(0, 1); //paso a la segunda fila
+  // La estacion cambia acorde a la temp ambiente
+  if (grados <= 0) {
+    lcd_1.print("Invierno");
+    digitalWrite(LEDV, HIGH);
+  } else if (grados >= 0 && grados <= 15) {
+    lcd_1.print("Otono");
+    digitalWrite(LEDV, HIGH);
+  } else if (grados >= 	15 && grados <= 25) {
+    lcd_1.print("Primavera");
+    digitalWrite(LEDV, HIGH);
+  } else if (grados >= 25 && grados <=60){
+    lcd_1.print("Verano");
+    digitalWrite(LEDV, HIGH);
+  }
+  else // Si la temp es mayor a 60, se detecta un incendio
+  {
+    lcd_1.clear();
+    lcd_1.print("INCENDIO");
+    lcd_1.setCursor(0, 1);
+    lcd_1.print("Evacue el lugar");
+    digitalWrite(LEDR, HIGH);
+    encenderRociador();
+  }
+}
+
+////////////////////////////////////////////////////////
+
+void cambiarEstadoCircuito()
+{
+  if (estadoCircuito)
+  {
+    estadoCircuito = false;
+    lcd_1.clear(); // Elimina cualquier texto del display
+  }
+  else
+  {
+    estadoCircuito = true;
+  }
+}
+
+////////////////////////////////////////////////////////
