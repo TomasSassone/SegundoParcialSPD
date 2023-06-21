@@ -21,31 +21,40 @@ el botón rojo para controlar el circuito.
 
 1. **Componentes necesarios:**
     • Arduino UNO
+   
     • Sensor de temperatura
+   
     • Control remoto IR (Infrarrojo)
+   
     • Display LCD (16x2 caracteres)
+   
     • Servo motor
+   
     • Cables y resistencias según sea necesario
+   
     • Protoboard para realizar las conexiones
+   
     • Dos LEDs.
     
     
 3. **Conexiones:**
 
     • Conecta el sensor de temperatura al pin analógico A0 de Arduino.
+   
     • Conecta el control remoto IR al pin digital 11 de Arduino.
+   
     • Conecta el display LCD utilizando los pines correspondientes de Arduino.
+   
     • Conecta el servo motor a uno de los pines PWM de Arduino (por ejemplo, pin 9).
   
   
-4. **Documentación:**
+5. **Documentación:**
 
-    • Deberán presentar un diagrama esquemático del circuito y explicar el
-    funcionamiento aplicado de cada componente.
-    • Presentar el código fuente del proyecto de Arduino listo para ser
-    implementado.
-    • Deberán explicar el funcionamiento integral utilizando documentación
-    MarkDown.
+    • Deberán presentar un diagrama esquemático del circuito y explicar el funcionamiento aplicado de cada componente.
+   
+    • Presentar el código fuente del proyecto de Arduino listo para ser implementado.
+   
+    • Deberán explicar el funcionamiento integral utilizando documentación MarkDown.
 
 
 
