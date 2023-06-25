@@ -91,6 +91,10 @@ void encenderSistemaTemperatura()
 
 void encenderRociador()
 {
+  /*
+  Enciende el Servo, que actúa a modo de "rociador" para
+  tratar de apagar el incendio.
+  */
   myServo.write(180);
   delay(1000);
   myServo.write(0);
@@ -101,7 +105,8 @@ void encenderRociador()
 
 void leerTemperatura()
 {
-  /* Lee la temperatura ambiente con el sensor de temp,
+  /*
+  Lee la temperatura ambiente con el sensor de temp,
   la imprime en celsius en el display LCD, y dependiendo
   de la misma, imprime en que estación se encuentra el lugar.
   Si la temperatura supera los 60°C, se reconoce como un
@@ -152,6 +157,10 @@ void leerTemperatura()
 
 void cambiarEstadoCircuito()
 {
+  /*
+  Controla si el circuito está encendido o apagado. Se maneja
+  con el control remoto.
+  */
   if (estadoCircuito)
   {
     estadoCircuito = false;
