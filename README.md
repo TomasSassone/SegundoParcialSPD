@@ -68,7 +68,7 @@ el botón rojo para controlar el circuito.
 ## Link al proyecto 🤖
 [Tinkercad](https://www.tinkercad.com/things/9qcenp0bgle-smashing-fyyran-kieran/editel?sharecode=7R-f8tYm2bGuDb0qvD2MaP91i2xPqwNEmHte011fbn0)
 
-[GDB](https://onlinegdb.com/jbjW1kvJe)
+[GDB](https://onlinegdb.com/IDYPrZcCG)
 
 ## Fuentes 🔍
 [Controlar display LCD con control remoto IR](https://www.youtube.com/watch?v=7jjwKB-lI50&t=438s)
